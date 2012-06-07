@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  description: MyText
+  purchased: 2012-06-07
+
+two:
+  description: MyText
+  purchased: 2012-06-07
