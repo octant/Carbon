@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120607191740) do
+ActiveRecord::Schema.define(:version => 20120607192417) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -52,6 +52,15 @@ ActiveRecord::Schema.define(:version => 20120607191740) do
     t.string   "status",     :default => "Active"
     t.datetime "created_at",                       :null => false
     t.datetime "updated_at",                       :null => false
+  end
+
+  create_table "networks", :force => true do |t|
+    t.string   "network_identifier"
+    t.string   "network_mask"
+    t.string   "default_gateway"
+    t.integer  "location_id"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
   end
 
   create_table "purchase_records", :force => true do |t|

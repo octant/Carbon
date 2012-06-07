@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  network_identifier: MyString
+  network_mask: MyString
+  default_gateway: MyString
+  location_id: 1
+
+two:
+  network_identifier: MyString
+  network_mask: MyString
+  default_gateway: MyString
+  location_id: 1
