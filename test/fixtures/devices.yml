@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  kind: MyString
+  manufacturer: MyString
+  model: MyString
+  serial_number: MyString
+  asset_tag: MyString
+  status: MyString
+  purchase_record_id: 1
+
+two:
+  kind: MyString
+  manufacturer: MyString
+  model: MyString
+  serial_number: MyString
+  asset_tag: MyString
+  status: MyString
+  purchase_record_id: 1
