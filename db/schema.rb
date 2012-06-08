@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120608100330) do
+ActiveRecord::Schema.define(:version => 20120608111822) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -58,6 +58,8 @@ ActiveRecord::Schema.define(:version => 20120608100330) do
     t.datetime "updated_at",                               :null => false
   end
 
+  add_index "devices", ["purchase_record_id"], :name => "index_devices_on_purchase_record_id"
+
   create_table "locations", :force => true do |t|
     t.string   "name"
     t.string   "address"
@@ -75,6 +77,8 @@ ActiveRecord::Schema.define(:version => 20120608100330) do
     t.datetime "updated_at",         :null => false
   end
 
+  add_index "networks", ["location_id"], :name => "index_networks_on_location_id"
+
   create_table "personalities", :force => true do |t|
     t.string   "name"
     t.string   "ip"
@@ -84,10 +88,14 @@ ActiveRecord::Schema.define(:version => 20120608100330) do
     t.datetime "updated_at", :null => false
   end
 
+  add_index "personalities", ["device_id", "network_id"], :name => "index_personalities_on_device_id_and_network_id"
+
   create_table "personalities_vulnerabilities", :id => false, :force => true do |t|
     t.integer "personality_id"
     t.integer "vulnerability_id"
   end
+
+  add_index "personalities_vulnerabilities", ["personality_id", "vulnerability_id"], :name => "index_personalities_vulnerabilities"
 
   create_table "purchase_records", :force => true do |t|
     t.text     "description"
