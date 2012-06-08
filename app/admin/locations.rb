@@ -1,4 +1,4 @@
-ActiveAdmin.register Location do
+ActiveAdmin.register Location, {:sort_order => :name_asc} do
   filter :name
   filter :address
   filter :status
