@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  qid: MyString
+  severity: MyString
+  title: MyString
+  last_update: 2012-06-08
+  diagnosis: MyText
+  consequence: MyText
+  solution: MyText
+  pci: false
+  fixable: false
+
+two:
+  qid: MyString
+  severity: MyString
+  title: MyString
+  last_update: 2012-06-08
+  diagnosis: MyText
+  consequence: MyText
+  solution: MyText
+  pci: false
+  fixable: false
