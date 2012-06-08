@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120608111822) do
+ActiveRecord::Schema.define(:version => 20120608135101) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(:version => 20120608111822) do
     t.integer  "network_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.date     "last_seen"
   end
 
   add_index "personalities", ["device_id", "network_id"], :name => "index_personalities_on_device_id_and_network_id"

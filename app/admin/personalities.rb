@@ -8,14 +8,14 @@ ActiveAdmin.register Personality do
   
   filter :name
   filter :ip
-  filter :updated_at, :label => "Last Seen"
+  filter :last_seen
 
   index do
     column :name do |personality|
       link_to personality.name, admin_personality_path(personality)
     end
     column :ip
-    column "Last Seen", :updated_at
+    column :last_seen
     column "Actions" do |personality|
       link_to "Edit", edit_admin_personality_path(personality), :target => '_blank'
     end
@@ -27,21 +27,23 @@ ActiveAdmin.register Personality do
       attributes_table_for personality do
         row :name
         row :ip
-        row :updated_at
+        row :last_seen
         row :created_at
       end
     end
 
-    panel "Location" do
-      attributes_table_for personality.location do
-        row :name do
-          link_to personality.location.name,
-          admin_location_path(personality.location)
+    if personality.location
+      panel "Location" do
+        attributes_table_for personality.location do
+          row :name do
+            link_to personality.location.name,
+            admin_location_path(personality.location)
+          end
+          row :address
         end
-        row :address
       end
     end
-
+    
     if personality.device
       panel "Associated Device Details" do
         attributes_table_for personality.device do
