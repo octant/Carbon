@@ -57,7 +57,6 @@ ActiveAdmin.register Device do
       panel "Personalities" do
         table_for device.personalities do
           column :name
-          column :mac
           column :ip
           column "Last Seen", :updated_at
         end
