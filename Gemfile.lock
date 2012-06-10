@@ -103,6 +103,7 @@ GEM
     net-ssh (2.5.2)
     net-ssh-gateway (1.1.0)
       net-ssh (>= 1.99.1)
+    nokogiri (1.5.3)
     orm_adapter (0.0.7)
     pg (0.13.2)
     polyamorous (0.5.0)
@@ -136,6 +137,7 @@ GEM
       json (~> 1.4)
     responders (0.9.1)
       railties (~> 3.1)
+    ruby-ip (0.9.1)
     sass (3.1.19)
     sass-rails (3.2.5)
       railties (~> 3.2.0)
@@ -170,8 +172,10 @@ DEPENDENCIES
   coffee-rails (~> 3.2.1)
   jquery-rails
   meta_search (>= 1.1.0.pre)
+  nokogiri
   pg
   rails (= 3.2.1)
+  ruby-ip
   sass-rails (~> 3.2.3)
   uglifier (>= 1.0.3)
   unicorn

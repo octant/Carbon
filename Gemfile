@@ -11,6 +11,9 @@ gem 'pg'
 gem 'activeadmin'
 gem "meta_search",    '>= 1.1.0.pre'
 
+# xml reports
+gem 'nokogiri'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -22,6 +25,8 @@ group :assets do
 
   gem 'uglifier', '>= 1.0.3'
 end
+
+gem 'ruby-ip'
 
 gem 'jquery-rails'
 
