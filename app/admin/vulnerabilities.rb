@@ -6,7 +6,7 @@ ActiveAdmin.register Vulnerability do
   filter :pci, :as => :select
   
   scope :priority, :default => true
-  scope :all
+  scope :rest
   
   index do
     column :severity
