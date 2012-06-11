@@ -2,51 +2,64 @@
 require 'nokogiri'
 require 'time'
 
-desc "Load vulnerabilities"
-task :load_vulns, [:file] => :environment do |t, args|
+log_file = Rails.root.join('log/vulns.log')
+logger = Logger.new(log_file)
+logger.formatter = Logger::Formatter.new
+
+tmp_log_file = Rails.root.join('log/fixed_vulns.log')
+tmp_logger = Logger.new(tmp_log_file)
+
+desc "Update vulnerabilities"
+task :update_vulns, [:file] do |t, args|
+  logger.info "Updating vulnerabilities"
   xml = Nokogiri::XML(File.read(Rails.root.join(args.file)))
       
   xml.css('SCAN IP VULNS CAT VULN').each do |vuln|
     qid = vuln['number']
-    puts "searching for #{qid}"
     v = Vulnerability.where(:qid => qid).first
     
     if v.nil?
+      logger.info "Adding #{qid}"
       v = update(Vulnerability.new(:qid => vuln['number']), vuln)
     elsif should_update?(v.last_update, vuln)
-      puts "Updating #{qid}"
+      logger.info "Updating #{qid}"
       v = update(v, vuln)
-    else
-      puts "found #{qid}"
     end
     
     if v.valid? and v.changed?
-      puts "saving qid: #{v.qid}"
       v.save
     end
   end
 end
 
 desc "Identify vulnerable"
-task :identify_vulnerable, [:file] => :environment do |t, args|
-   xml = Nokogiri::XML(File.read(Rails.root.join(args.file)))
-   xml.css('SCAN IP').each do |ip|
-     if ip.at_css('NETBIOS_HOSTNAME')
-       p = Personality.where('name ilike ?', ip.at_css('NETBIOS_HOSTNAME').content).first
-     else
-       p = Personality.where('name ilike ?', ip['value'].split('.').join('-')).first
-     end
-     if p
-       old_vulns = p.vulnerabilities
-       new_list = []
+task :identify_vulnerable, [:file] => [:environment, :update_vulns] do |t, args|
+  logger.info "Identifying affected installs"
+  xml = Nokogiri::XML(File.read(Rails.root.join(args.file)))
+  xml.css('SCAN IP').each do |ip|
+    if ip.at_css('NETBIOS_HOSTNAME')
+      p = Personality.where('name ilike ?', ip.at_css('NETBIOS_HOSTNAME').content).first
+    else
+      p = Personality.where('name ilike ?', ip['value'].split('.').join('-')).first
+    end
+    if p
+      old_vulns = p.vulnerabilities
+      new_list = []
      
-       new_qids = ip.css('VULNS CAT VULN').map {|v| v['number']}.uniq
-       new_list += old_removed(old_vulns, new_qids)
-       new_list += new_added(old_vulns, new_qids)
-       p.vulnerabilities = new_list
-       p.save if p.valid?
-     end
-   end
+      new_qids = ip.css('VULNS CAT VULN').map {|v| v['number']}.uniq
+      
+      if same_list?(old_vulns.map(&:name), new_qids)
+        logger.info "No change for #{p.name}"
+      else
+        logger.info "Updating vulnerabilities for #{p.name}"
+        new_list += remove_old(old_vulns, new_qids, p.name)
+        new_list += add_new(old_vulns, new_qids)
+        p.vulnerabilities = new_list
+        
+        p.save if p.valid?
+      end
+    end
+  end
 end
 
 def update(v, vuln)
@@ -62,11 +75,21 @@ def update(v, vuln)
   return v
 end
 
-def old_removed(old_vulns, new_qids)
+def same_list?(list1, list2)
+  (list1 - list2 ) == (list2 - list1)
+end
+
+def remove_old(old_vulns, new_qids, ip)
+  # Temporary solution to removing vulns
+  old_qids = old_vulns.map(&:name)
+  removed = old_qids - new_qids
+  removed.each do |vuln|
+    tmp_logger.info "#{ip},#{vuln},#{Time.now.to_date}"
+  end
   old_vulns.select {|e| new_qids.include?(e.name)}
 end
 
-def new_added(old_vulns, new_qids)
+def add_new(old_vulns, new_qids)
   new_vulns = []
   old_qids = old_vulns.map(&:name)
   new_qids.each do |qid|
