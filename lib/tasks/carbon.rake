@@ -18,7 +18,7 @@ task :scan_network => :environment do
       net = IP.new("#{net_obj.network_identifier}/#{mask_len(net_obj.network_mask)}")
       threads = []
       range = (1..(net.size - 2))
-      range.each_slice(2) do |chunk|
+      range.each_slice(20) do |chunk|
         chunk.each do |i|
           ip = (net + i).to_addr
           threads << Thread.new(i) do
