@@ -52,7 +52,7 @@ task :identify_vulnerable, [:file] => [:environment, :update_vulns] do |t, args|
         logger.info "No change for #{p.name}"
       else
         logger.info "Updating vulnerabilities for #{p.name}"
-        new_list += remove_old(old_vulns, new_qids, p.name)
+        new_list += remove_old(old_vulns, new_qids, p.name, tmp_logger)
         new_list += add_new(old_vulns, new_qids)
         p.vulnerabilities = new_list
         
@@ -79,12 +79,12 @@ def same_list?(list1, list2)
   (list1 - list2 ) == (list2 - list1)
 end
 
-def remove_old(old_vulns, new_qids, ip)
+def remove_old(old_vulns, new_qids, ip, log)
   # Temporary solution to removing vulns
   old_qids = old_vulns.map(&:name)
   removed = old_qids - new_qids
   removed.each do |vuln|
-    tmp_logger.info "#{ip},#{vuln},#{Time.now.to_date}"
+    log.info "#{ip},#{vuln},#{Time.now.to_date}"
   end
   old_vulns.select {|e| new_qids.include?(e.name)}
 end
