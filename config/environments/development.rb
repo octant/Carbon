@@ -36,5 +36,5 @@ Carbon::Application.configure do
   config.assets.debug = true
   
   # Active admin
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  config.action_mailer.default_url_options = { :host => '192.168.4.101:3000' }
 end
