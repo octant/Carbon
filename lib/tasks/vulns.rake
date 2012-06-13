@@ -39,6 +39,8 @@ task :identify_vulnerable, [:file] => [:environment, :update_vulns] do |t, args|
   xml.css('SCAN IP').each do |ip|
     if ip.at_css('NETBIOS_HOSTNAME')
       p = Personality.where('name ilike ?', ip.at_css('NETBIOS_HOSTNAME').content).first
+    elsif ip['name'] != "No registered hostname"
+      p = Personality.where('name ilike ?', ip['name'].split('.').first).first
     else
       p = Personality.where('name ilike ?', ip['value'].split('.').join('-')).first
     end
@@ -84,7 +86,7 @@ def remove_old(old_vulns, new_qids, ip, log)
   old_qids = old_vulns.map(&:name)
   removed = old_qids - new_qids
   removed.each do |vuln|
-    log.info "#{ip},#{vuln},#{Time.now.to_date}"
+    log.info "#{ip},#{vuln},#{Time.now}"
   end
   old_vulns.select {|e| new_qids.include?(e.name)}
 end
