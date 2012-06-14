@@ -23,7 +23,7 @@ ActiveAdmin.register List do
           link_to personality.name, admin_personality_path(personality)
         end
         column :device do |personality|
-          link_to personality.device, admin_device_path(personality.device)
+          link_to personality.device, admin_device_path(personality.device) if personality.device
         end
         column "High Priority" do |personality|
           personality.vulnerabilities.high_priority.size
