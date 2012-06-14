@@ -22,6 +22,9 @@ ActiveAdmin.register List do
         column :name do |personality|
           link_to personality.name, admin_personality_path(personality)
         end
+        column :device do |personality|
+          link_to personality.device, admin_device_path(personality.device)
+        end
         column "High Priority" do |personality|
           personality.vulnerabilities.high_priority.size
         end
@@ -31,7 +34,6 @@ ActiveAdmin.register List do
         column "No Patch" do |personality|
           personality.vulnerabilities.unfixable.size
         end
-        
       end
     end      
   end
