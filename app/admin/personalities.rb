@@ -60,8 +60,8 @@ ActiveAdmin.register Personality do
       end
     end
 
-    panel "Vulnerabilities" do
-      table_for personality.vulnerabilities.priority.order("severity DESC") do
+    panel "Vulnerabilities - High Priority" do
+      table_for personality.vulnerabilities.high_priority.order("severity DESC") do
         column :severity
         column "QID", :qid do |vuln|
           link_to vuln.qid, admin_vulnerability_path(vuln)
@@ -70,6 +70,25 @@ ActiveAdmin.register Personality do
       end
     end
     
+    panel "Vulnerabilities - Low Priority" do
+      table_for personality.vulnerabilities.low_priority.order("severity DESC") do
+        column :severity
+        column "QID", :qid do |vuln|
+          link_to vuln.qid, admin_vulnerability_path(vuln)
+        end
+        column :title
+      end
+    end
+    
+    panel "Vulnerabilities - No Patch" do
+      table_for personality.vulnerabilities.unfixable.order("severity DESC") do
+        column :severity
+        column "QID", :qid do |vuln|
+          link_to vuln.qid, admin_vulnerability_path(vuln)
+        end
+        column :title
+      end
+    end
   end
 
   form do |f|
