@@ -17,33 +17,22 @@ ActiveAdmin.register List do
       end
     end
     
-    
-    list.personalities.order("name DESC").each do |personality|
-      panel personality.name do
-        
-        attributes_table_for personality do
-          row :ip
-          row :last_seen
+    panel "Personalities" do
+      table_for list.personalities do
+        column :name do |personality|
+          link_to personality.name, admin_personality_path(personality)
         end
-        
-        h4 "Vulnerabilities - High Priority"
-        table_for personality.vulnerabilities.high_priority do
-          column "QID", :qid do |vuln|
-            link_to vuln.qid, admin_vulnerability_path(vuln)
-          end
-          column :title
+        column "High Priority" do |personality|
+          personality.vulnerabilities.high_priority.size
         end
-        
-        h4 "Vulnerabilities - Low Priority"
-        table_for personality.vulnerabilities.low_priority do
-          column "QID", :qid do |vuln|
-            link_to vuln.qid, admin_vulnerability_path(vuln)
-          end
-          column :title
+        column "Low Priority" do |personality|
+          personality.vulnerabilities.low_priority.size
+        end
+        column "No Patch" do |personality|
+          personality.vulnerabilities.unfixable.size
         end
         
       end
-    end
-      
+    end      
   end
 end
