@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120608135101) do
+ActiveRecord::Schema.define(:version => 20120614133319) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -59,6 +59,20 @@ ActiveRecord::Schema.define(:version => 20120608135101) do
   end
 
   add_index "devices", ["purchase_record_id"], :name => "index_devices_on_purchase_record_id"
+
+  create_table "lists", :force => true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "lists_personalities", :id => false, :force => true do |t|
+    t.integer "list_id"
+    t.integer "personality_id"
+  end
+
+  add_index "lists_personalities", ["list_id", "personality_id"], :name => "index_lists_personalities_on_list_id_and_personality_id"
 
   create_table "locations", :force => true do |t|
     t.string   "name"

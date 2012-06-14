@@ -3,6 +3,7 @@ class Personality < ActiveRecord::Base
   belongs_to :network
   has_one :location, :through => :network
   has_and_belongs_to_many :vulnerabilities
+  has_and_belongs_to_many :lists
   
   default_scope :order => 'name ASC'
   scope :orphans, where(:device_id => nil)
