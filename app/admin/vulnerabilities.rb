@@ -5,7 +5,7 @@ ActiveAdmin.register Vulnerability do
   filter :fixable, :as => :select
   filter :pci, :as => :select
   
-  scope :priority, :default => true
+  scope :high_priority, :default => true
   scope :all
   
   index do
