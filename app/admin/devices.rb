@@ -56,7 +56,9 @@ ActiveAdmin.register Device do
 
       panel "Personalities" do
         table_for device.personalities do
-          column :name
+          column :name do |personality|
+            link_to personality.name, admin_personality_path(personality)
+          end
           column :ip
           column "Last Seen", :updated_at
         end
