@@ -11,7 +11,7 @@ tmp_logger = Logger.new(tmp_log_file)
 
 desc "Update vulnerabilities"
 task :update_vulns, [:file] => :environment do |t, args|
-  logger.info "Updating vulnerabilities"
+  logger.info "Updating vulnerabilities from file: [#{args.file}]"
   xml = Nokogiri::XML(File.read(Rails.root.join(args.file)))
       
   xml.css('VULN_DETAILS').each do |vuln|
@@ -36,7 +36,7 @@ end
 
 desc "Identify vulnerable"
 task :identify_vulnerable, [:file] => [:environment, :update_vulns] do |t, args|
-  logger.info "Identifying affected installs"
+  logger.info "Identifying affected installs from file: [#{args.file}]"
   xml = Nokogiri::XML(File.read(Rails.root.join(args.file)))
   xml.css('HOST').each do |ip|
     if ip.at_css('NETBIOS')
