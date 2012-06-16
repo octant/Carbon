@@ -3,7 +3,7 @@ require 'nokogiri'
 require 'time'
 
 log_file = Rails.root.join('log/vulns.log')
-logger = Logger.new($stdout)
+logger = Logger.new(log_file)
 logger.formatter = Logger::Formatter.new
 
 tmp_log_file = Rails.root.join('log/fixed_vulns.log')
