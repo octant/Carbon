@@ -2,6 +2,7 @@ ActiveAdmin.register Vulnerability do
   filter :qid
   filter :title
   filter :severity
+  filter :solution
   filter :fixable, :as => :select
   filter :pci, :as => :select
   
