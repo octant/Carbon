@@ -10,9 +10,9 @@ tmp_log_file = Rails.root.join('log/fixed_vulns.log')
 tmp_logger = Logger.new(tmp_log_file)
 
 desc "Update vulnerabilities"
-task :update_vulns, [:file] => :environment do |t, args|
-  logger.info "Updating vulnerabilities from file: [#{args.file}]"
-  xml = Nokogiri::XML(File.read(Rails.root.join(args.file)))
+task :update_vulns => :environment do |t, args|
+  logger.info "Updating vulnerabilities from file: [#{latest_report}]"
+  xml = Nokogiri::XML(File.read(latest_report))
       
   xml.css('VULN_DETAILS').each do |vuln|
     qid = vuln.at_css('QID').content
@@ -29,15 +29,15 @@ task :update_vulns, [:file] => :environment do |t, args|
     end
     
     if v.valid? and v.changed?
-      v.save
+     v.save
     end
   end
 end
 
 desc "Identify vulnerable"
-task :identify_vulnerable, [:file] => [:environment, :update_vulns] do |t, args|
-  logger.info "Identifying affected installs from file: [#{args.file}]"
-  xml = Nokogiri::XML(File.read(Rails.root.join(args.file)))
+task :identify_vulnerable => [:environment, :update_vulns] do |t, args|
+  logger.info "Identifying affected installs from file: [#{latest_report}]"
+  xml = Nokogiri::XML(File.read(latest_report))
   xml.css('HOST').each do |ip|
     if ip.at_css('NETBIOS')
       p = Personality.where('name ilike ?', ip.at_css('NETBIOS').content).first
@@ -123,4 +123,9 @@ def fixable?(vuln)
   else
     return true
   end
+end
+
+def latest_report
+  d = Dir.new("/home/#{`whoami`.chomp}/reports")
+  return File.join(d.path, d.sort.last)
 end
