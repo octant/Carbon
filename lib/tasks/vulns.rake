@@ -116,7 +116,17 @@ def should_update?(last_update, vuln)
 end
 
 def fixable?(vuln)
-  if vuln.at_css('SOLUTION').content.match(/^There are no vendor supplied patches available at this time\./) != nil
+  if vuln.at_css('SOLUTION').content.match(/There are no vendor.supplied patches available at this time\./) != nil
+    return false
+  elsif vuln.at_css('SOLUTION').content.match(/There are currently no vendor.supplied patch or workarounds available at this time\./) != nil
+    return false
+  elsif vuln.at_css('SOLUTION').content.match(/There are no vendor.supplied solutions available at this time\./) != nil
+    return false
+  elsif vuln.at_css('SOLUTION').content.match(/Currently there are no vendor.supplied patches available for this issue\./) != nil
+    return false
+  elsif vuln.at_css('SOLUTION').content.match(/Currently there are no vendor.supplied patches available\./) != nil
+    return false
+  elsif vuln.at_css('SOLUTION').content.match(/No vendor.supplied patches available at this time\./) != nil
     return false
   elsif vuln.at_css('TITLE').content.match(/zero day/i) != nil
     return false
@@ -126,6 +136,6 @@ def fixable?(vuln)
 end
 
 def latest_report
-  d = Dir.new("/home/deployer/reports")
+  d = Dir.new("/home/#{`whoami`.chomp}/reports")
   return File.join(d.path, d.sort.last)
 end
