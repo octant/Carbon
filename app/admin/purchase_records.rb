@@ -1,4 +1,4 @@
-ActiveAdmin.register PurchaseRecord do
+ActiveAdmin.register PurchaseRecord, {:sort_order => :purchased} do
   filter :description
   filter :purchased
   index do
