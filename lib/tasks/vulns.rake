@@ -130,6 +130,6 @@ def fixable?(vuln)
 end
 
 def latest_report
-  d = Dir.new("/home/#{`whoami`.chomp}/reports")
+  d = Dir.new("/home/deployer/reports")
   return File.join(d.path, d.sort.last)
 end
