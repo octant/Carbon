@@ -21,11 +21,9 @@ task :update_vulns => :environment do |t, args|
     if v.nil?
       logger.info "Adding #{qid}"
       v = update(Vulnerability.new(:qid => qid), vuln)
-    elsif should_update?(v.last_update, vuln)
+    else
       logger.info "Updating #{qid}"
       v = update(v, vuln)
-    else
-      logger.info "Doing nothing for #{qid}"
     end
     
     if v.valid? and v.changed?
@@ -109,10 +107,6 @@ def add_new(old_vulns, new_qids)
     end
   end
   new_vulns
-end
-
-def should_update?(last_update, vuln)
-  last_update < Time.parse(vuln.at_css('LAST_UPDATE').content).to_date
 end
 
 def fixable?(vuln)
